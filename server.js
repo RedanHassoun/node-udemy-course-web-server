@@ -56,6 +56,14 @@ app.get('/about', (req,res)=>{
 })
 
 
+app.get('/projects', (req,res)=>{
+  res.render('projects.hbs',{
+    pageTitle: 'Projects page',
+    projectsWelcome : 'Welcome to my projects',
+    currentYear: new Date().getFullYear()
+  })
+})
+
 app.listen(port,()=>{
   var logMessage = `server is up on port ${port}`
   console.log(logMessage)
