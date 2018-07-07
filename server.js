@@ -2,7 +2,16 @@ const express = require('express')
 const hbs = require('hbs')
 const fs = require('fs')
 
+const port = process.env.PORT || 3000
 var app = express()
+
+var logToFile = (textToLog)=>{
+  fs.appendFile('server.log',textToLog+'\n',(err)=>{
+    if(err){
+      console.log('ERROR: unable to append to server.log !')
+    }
+  })
+}
 
 app.set('view engine','hbs')
 app.use(express.static(__dirname + '/public'))
@@ -10,11 +19,7 @@ app.use((req,res,next)=>{
   var now = new Date().toString()
   var logMessage = `${now} :  ${req.method} ${req.url}`
   console.log(logMessage)
-  fs.appendFile('server.log',logMessage+'\n',(err)=>{
-    if(err){
-      console.log('ERROR: unable to append to server.log !')
-    }
-  })
+  logToFile(logMessage)
   next()
 })
 // app.use((req,res,next)=>{
@@ -51,6 +56,8 @@ app.get('/about', (req,res)=>{
 })
 
 
-app.listen(3000,()=>{
-  console.log('server is up on port 3000')
+app.listen(port,()=>{
+  var logMessage = `server is up on port ${port}`
+  console.log(logMessage)
+  logToFile(logMessage)
 })
